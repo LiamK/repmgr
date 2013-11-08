@@ -9,10 +9,9 @@ if(node[:repmgr][:replication][:role] == 'master')
   unless(node[:repmgr][:replication][:user_password])
     pg_pass = SecureRandom.base64
     node.set[:repmgr][:replication][:user_password] = pg_pass
-    node.save # make sure the password gets saved!
     ruby_block "save node data" do
       block do
-        node.save
+        node.save # make sure the password gets saved!
       end
       not_if { Chef::Config[:solo] }
       action :create
