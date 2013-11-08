@@ -10,6 +10,13 @@ if(node[:repmgr][:replication][:role] == 'master')
     pg_pass = SecureRandom.base64
     node.set[:repmgr][:replication][:user_password] = pg_pass
     node.save # make sure the password gets saved!
+    ruby_block "save node data" do
+      block do
+        node.save
+      end
+      not_if { Chef::Config[:solo] }
+      action :create
+    end
   end
 else
   pass_assign = resources(:bash => 'assign-postgres-password')
@@ -27,7 +34,13 @@ else
     # Cache the password so that if the node is promoted to master, we don't lose our
     # passwords
     node.set[:repmgr][:replication][:user_password] = pg_pass
-    node.save
+    ruby_block "save node data" do
+      block do
+        node.save
+      end
+      not_if { Chef::Config[:solo] }
+      action :create
+    end
   end
 end
 
