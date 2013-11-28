@@ -103,7 +103,8 @@ if(node[:repmgr][:replication][:role] == 'master')
     :host => '127.0.0.1',
     :port => node[:postgresql][:config][:port],
     :username => 'postgres',
-    :password => node[:postgresql][:password][:postgres]
+    :password => node[:postgresql][:pg_password]
+    #:password => node[:postgresql][:password][:postgres]
   }
 
   postgresql_database node[:repmgr][:replication][:database] do
