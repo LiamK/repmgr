@@ -21,13 +21,14 @@ else
   pass_assign = resources(:bash => 'assign-postgres-password')
   pass_assign.action :nothing
 
-  master_node = discovery_search(
-    'replication_role:master',
-    :environment_aware => node[:repmgr][:replication][:common_environment],
-    :minimum_response_time_sec => false,
-    :raw_search => true,
-    :empty_ok => false
-  )
+  master_node = search(:role, 'name:master').first
+#  master_node = discovery_search(
+#    'replication_role:master',
+#    :environment_aware => node[:repmgr][:replication][:common_environment],
+#    :minimum_response_time_sec => false,
+#    :raw_search => true,
+#    :empty_ok => false
+#  )
   if(master_node)
     pg_pass = master_node[:repmgr][:replication][:user_password]
     # Cache the password so that if the node is promoted to master, we don't lose our
