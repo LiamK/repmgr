@@ -160,6 +160,19 @@ node.set[:postgresql][:config][:wal_keep_segments] = node[:repmgr][:replication]
 
 # HBA
 node.default[:postgresql][:pg_hba] = [
-  {:type => 'host', :db => node[:repmgr][:replication][:database], :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'},
-  {:type => 'host', :db => 'replication', :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'}
+  {
+    :type => 'host',
+    :db => node[:repmgr][:replication][:database],
+    :user => node[:repmgr][:replication][:user],
+    :addr => node[:repmgr][:master_allow_from],
+    :method => 'md5'
+  },
+  {
+    :type => 'host',
+    :db => 'replication',
+    :user => node[:repmgr][:replication][:user],
+    :addr => node[:repmgr][:master_allow_from],
+    :method => 'md5'
+  }
 ] + node[:postgresql][:pg_hba]
+
