@@ -1,4 +1,4 @@
-require resolv
+require "resolv"
 include_recipe 'repmgr'
 package 'rsync'
 
