@@ -51,12 +51,13 @@ else
     end
 
     # if these values are not set, then use some sensible defaults
-    unless master_node[:repmgr][:replication][:keep_segments]
-      master_node[:repmgr][:replication][:keep_segments] = 
-        node[:repmgr][:replication][:keep_segments]
+    unless master_node.fetch(:repmgr,{}).fetch(:replication,{}).fetch(:keep_segments,nil)
+      mh = {:repmgr => { :replication => { :keep_segments => node[:repmgr][:replication][:keep_segments]}}}
+      master_node.merge(mh)
     end
-    unless master_node[:postgresql][:config][:port]
-      master_node[:postgresql][:config][:port] = 5432
+    unless master_node.fetch(:postgresql,{}).fetch(:config,{}).fetch(:port, nil)
+      mh = {:postgresql => { :config => { :port => 5432 }}}
+      master_node.merge(mh)
     end
   else
     master_node = discovery_search(
