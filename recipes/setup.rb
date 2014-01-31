@@ -34,6 +34,7 @@ if(node[:repmgr][:replication][:role] == 'master')
   end
 else
   if Chef::Config[:solo]
+    # This is using chef-solo-search, which looks in data bag node/master.json
     master_node = search(:node, 'name:master').first
     if master_node.nil?
       raise "Master node not found!"
@@ -50,14 +51,12 @@ else
         raise "Invalid master host address: #{master_addr}"
     end
 
-    # if these values are not set, then use some sensible defaults
+    # Make sure these values are set in the master node
     unless master_node.fetch(:repmgr,{}).fetch(:replication,{}).fetch(:keep_segments,nil)
-      mh = {:repmgr => { :replication => { :keep_segments => node[:repmgr][:replication][:keep_segments]}}}
-      master_node.merge(mh)
+      raise "Set master_node[:repmgr][:replication][:keep_segments]"
     end
     unless master_node.fetch(:postgresql,{}).fetch(:config,{}).fetch(:port, nil)
-      mh = {:postgresql => { :config => { :port => 5432 }}}
-      master_node.merge(mh)
+      raise "Set master_node[:postgresql][:config][:port]"
     end
   else
     master_node = discovery_search(
