@@ -56,7 +56,7 @@ ruby_block 'Clean previous IDs' do
       master_node = node
     else
       if Chef::Config[:solo]
-        master_node = search(:node, 'name:master')
+        master_node = search(:node, 'name:master').first
       else
         master_node = discovery_search(
           'replication_role:master',
